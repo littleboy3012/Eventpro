@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventPro - Worker Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <style>
+        .dashboard-gradient {
+            background: linear-gradient(45deg, #FF0000, #1E90FF, #FF69B4);
+            background-size: 400% 400%;
+            animation: rainbow 15s ease infinite;
+        }
+
+        @keyframes rainbow {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-sky-100 via-purple-100 to-pink-100 min-h-screen">
+    <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="index.html" class="text-2xl font-bold bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                    EventPro
+                </a>
+                <div class="flex items-center space-x-6">
+                    <a href="worker_job" class="text-blue-500 hover:text-purple-500 transition-colors">Dashboard</a>
+                    <button onclick="logout()" class="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-purple-500 hover:to-pink-500 text-white px-6 py-2 rounded-full transition-all duration-300">Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 pt-24 pb-16">
+        <div class="bg-white/70 backdrop-blur-md rounded-xl p-6 shadow-lg mb-8">
+            <div class="flex flex-col md:flex-row items-start gap-6">
+                <div class="w-32 h-32 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
+                    <span class="text-4xl text-white font-bold">
+                        <%= user.name ? user.name.split(" ").map(n => n[0]).join("") : "N/A" %>
+                    </span>
+                </div>
+                <div class="flex-grow">
+                    <h2 class="text-2xl font-bold mb-4"><%= user.name || "Not Available" %></h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-gray-600">Phone: <%= user.phone || "Not Available" %></p>
+                            <p class="text-gray-600">Email: <%= user.email || "Not Available" %></p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Age: <%= user.age || "Not Available" %></p>
+                            <p class="text-gray-600">Gender: <%= user.gender || "Not Available" %></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white/70 backdrop-blur-md rounded-xl p-6 shadow-lg">
+                <h2 class="text-2xl font-bold mb-6">Current Jobs</h2>
+                <div id="currentJobs" class="space-y-4">
+                    <% if (jobs.length > 0) { %> 
+                        <% jobs.forEach(job => { %>  <!-- Loop through all jobs -->
+                            <div class="p-4 bg-white rounded-lg shadow">
+                                <h3 class="text-xl font-semibold">Event Title: <%= job.eventTitle || "Not Available" %></h3>
+                                <p class="text-gray-600">Job Description: <%= job.jobDescription || "Not Available" %></p>
+                                <p class="text-gray-600">Payment Budget: ₹<%= job.paymentBudget || "Not Available" %></p>
+                                <p class="text-gray-600">Event Duration: <%= job.eventDuration || "Not Available" %> hours</p>
+                                <p class="text-gray-600">Location: <%= job.eventLocation || "Not Available" %></p>
+                                <p class="text-gray-600">Dress Code: <%= job.dressCode || "Not Available" %></p>
+        
+                                <span class="text-gray-600">
+                                    Age Range: <%= user.ageRange ? `${user.ageRange.minAge || "N/A"} - ${user.ageRange.maxAge || "N/A"}` : "Not Available" %>
+                                </span>
+        
+                                <p class="text-gray-600">
+                                    Male Staff Required: <%= job.staffGenderRequirements ? job.staffGenderRequirements.maleStaff || 0 : 0 %>
+                                </p>
+                                <p class="text-gray-600">
+                                    Female Staff Required: <%= job.staffGenderRequirements ? job.staffGenderRequirements.femaleStaff || 0 : 0 %>
+                                </p>
+                                <p class="text-gray-600">Additional Requirements: <%= job.additionalRequirements || "None" %></p>
+                                <p class="text-gray-500 text-sm">
+                                    Posted At: <%= job.postedAt ? new Date(job.postedAt).toLocaleString() : "Not Available" %>
+                                </p>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <p class="text-gray-600">No jobs available.</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        
+        
+
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+    </script>
+</body>
+</html>
